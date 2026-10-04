@@ -5,21 +5,21 @@ EfficientDet-D0([zylo117/Yet-Another-EfficientDet-Pytorch](https://github.com/zy
 
 ## ✅ 최종 정리본
 
-- 📓 [EfficientDet_실습_코드리뷰.ipynb](report/EfficientDet_실습_코드리뷰.ipynb) — 실행 결과 포함
-- 📄 [EfficientDet_실습_코드리뷰.pdf](report/EfficientDet_실습_코드리뷰.pdf) — 표지 포함 48쪽
+- 📓 [EfficientDet_실습_코드리뷰.ipynb](코드리뷰/EfficientDet_실습_코드리뷰.ipynb) — 실행 결과 포함
+- 📄 [EfficientDet_실습_코드리뷰.pdf](코드리뷰/EfficientDet_실습_코드리뷰.pdf) — 표지 포함 48쪽
 
 원본 코드를 **순서 그대로** 실행하며 코드마다 아래에 의미를 정리했고, 고칠 점이 있는 코드는 **바로 아래에 🔍 코드 리뷰**를 붙였습니다(Part 1·2, 13개).
-진행하면서 막혔던 부분과 해결, 개인 회고는 [`개인회고.ipynb`](report/개인회고.ipynb) / [`.pdf`](report/개인회고.pdf)에 따로 정리했습니다.
+진행하면서 막혔던 부분과 해결, 개인 회고는 [`개인회고.ipynb`](개인회고/개인회고.ipynb) / [`.pdf`](개인회고/개인회고.pdf)에 따로 정리했습니다.
 
 ## 📁 파일 구성
 
 | 파일 | 설명 |
 |---|---|
-| [`report/EfficientDet_실습_코드리뷰.ipynb`](report/EfficientDet_실습_코드리뷰.ipynb) / [`.pdf`](report/EfficientDet_실습_코드리뷰.pdf) | **최종 정리본** — 내 컴퓨터에서 실행, 코드 설명 + 코드 리뷰 |
-| [`report/개인회고.ipynb`](report/개인회고.ipynb) / [`.pdf`](report/개인회고.pdf) | 진행하면서 막혔던 부분과 해결, 개인 회고 |
-| [`original/4. EfficientDet 실습 [프로젝트].ipynb`](original/4.%20EfficientDet%20%E1%84%89%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B3%E1%86%B8%20%5B%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%5D.ipynb) | 과제 원본 노트북(Colab) |
-| [`assets/soccer.mp4`](assets/soccer.mp4) | 영상 분석 입력. 원본 `soccer.gif`(437MB)는 GitHub 용량 제한(100MB) 때문에 1280px mp4로 변환해 올림 |
-| [`assets/normal.png`](assets/normal.png) | 제조 현장 예시 사진 (PCB 보드) |
+| [`코드리뷰/EfficientDet_실습_코드리뷰.ipynb`](코드리뷰/EfficientDet_실습_코드리뷰.ipynb) / [`.pdf`](코드리뷰/EfficientDet_실습_코드리뷰.pdf) | **최종 정리본** — 내 컴퓨터에서 실행, 코드 설명 + 코드 리뷰 |
+| [`개인회고/개인회고.ipynb`](개인회고/개인회고.ipynb) / [`.pdf`](개인회고/개인회고.pdf) | 진행하면서 막혔던 부분과 해결, 개인 회고 |
+| [`데이터셋/4. EfficientDet 실습 [프로젝트].ipynb`](데이터셋/4.%20EfficientDet%20%E1%84%89%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B3%E1%86%B8%20%5B%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%5D.ipynb) | 과제 원본 노트북(Colab) |
+| [`데이터셋/soccer.mp4`](데이터셋/soccer.mp4) | 영상 분석 입력. 원본 `soccer.gif`(437MB)는 GitHub 용량 제한(100MB) 때문에 1280px mp4로 변환해 올림 |
+| [`데이터셋/normal.png`](데이터셋/normal.png) | 제조 현장 예시 사진 (PCB 보드) |
 
 - 데이터: [Kaggle — Vehicle Detection Image Dataset](https://www.kaggle.com/datasets/pkdarabi/vehicle-detection-image-dataset) (Roboflow COCO 형식, 흑백 v9i · 컬러 v8i)
 
