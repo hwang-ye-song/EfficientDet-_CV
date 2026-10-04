@@ -1,175 +1,172 @@
-# EfficientDet 실습 보고서
+# EfficientDet 실습 — 실습 코드 정리와 코드 리뷰
 
-> EfficientDet-D0(PyTorch)으로 **사전학습 모델 추론 → 영상 추론 → 커스텀 차량 데이터 학습·평가**까지 진행한 실습 정리
+EfficientDet-D0([zylo117/Yet-Another-EfficientDet-Pytorch](https://github.com/zylo117/Yet-Another-EfficientDet-Pytorch))로 **사전학습 모델 추론 → 영상 분석 → 차량 데이터 학습·평가**를 진행하고, 실습 코드를 리뷰한 레포입니다.
+과제 원본 자료(Colab 노트북 + 강의 PDF)를 바탕으로, 내 컴퓨터(Windows · RTX 5060)에서 처음부터 끝까지 실행했습니다.
+
+## ✅ 최종 정리본
+
+- 📓 [EfficientDet_실습_코드리뷰.ipynb](EfficientDet_실습_코드리뷰.ipynb) — 실행 결과 포함
+- 📄 [EfficientDet_실습_코드리뷰.pdf](EfficientDet_실습_코드리뷰.pdf) — 표지 포함 59쪽
+
+원본 코드를 **순서 그대로** 실행하며 코드마다 아래에 의미를 정리했고, 고칠 점이 있는 코드는 **바로 아래에 🔍 코드 리뷰**(문제 → 영향 → 개선안, 25개)를 붙였습니다. 주요 문제는 실행 결과로 근거를 확인했습니다.
 
 ## 📁 파일 구성
 
 | 파일 | 설명 |
 |---|---|
-| [`EfficientDet_Colab.ipynb`](./EfficientDet_Colab.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hwang-ye-song/EfficientDet-_CV/blob/main/EfficientDet_Colab.ipynb) | **Colab 실행용** — 원본 코드는 그대로 두고, 문제가 생기는 셀 위에만 `🔧 [추가]` 셀을 넣은 버전 |
-| [`4. EfficientDet 실습 [정리본].ipynb`](./4.%20EfficientDet%20실습%20[정리본].ipynb) | **정리본** — 원본 코드·출력 그대로 + 각 셀 아래 `💬 코멘트`, 결과 분석, 느낀 점 |
-| [`4. EfficientDet 실습 [프로젝트].ipynb`](./4.%20EfficientDet%20실습%20[프로젝트].ipynb) | 원본 실습 노트북 (Colab 실행) |
-| `4. EfficientDet 실습 [프로젝트].pdf` | 강의 자료 — EfficientDet 기반 제조 영상 분석 최적화 |
-| `normal.png` | 제조 영상 예시 (PCB 보드) |
-| `soccer.mp4` | 영상 추론 실습의 **입력 영상** (축구). 원본 `soccer.gif`(437MB)를 1280px mp4로 변환 — 아래 [작업 기록](#-작업-기록) 참고 |
+| [`EfficientDet_실습_코드리뷰.ipynb`](EfficientDet_실습_코드리뷰.ipynb) / [`.pdf`](EfficientDet_실습_코드리뷰.pdf) | **최종 정리본** — 내 컴퓨터에서 실행, 코드 설명 + 코드 리뷰 |
+| [`EfficientDet_Colab.ipynb`](EfficientDet_Colab.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hwang-ye-song/EfficientDet-_CV/blob/main/EfficientDet_Colab.ipynb) | Colab 실행용 — 원본 코드는 그대로 두고, 막히는 셀 위에만 `🔧 [추가]` 셀을 넣은 버전 |
+| [`4. EfficientDet 실습 [정리본].ipynb`](4.%20EfficientDet%20%EC%8B%A4%EC%8A%B5%20%5B%EC%A0%95%EB%A6%AC%EB%B3%B8%5D.ipynb) | 이전 정리본 — 원본 Colab 실행 결과에 `💬 코멘트`를 단 버전 |
+| [`4. EfficientDet 실습 [프로젝트].ipynb`](4.%20EfficientDet%20%E1%84%89%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B3%E1%86%B8%20%5B%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%5D.ipynb) / [`.pdf`](4.%20EfficientDet%20%E1%84%89%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B3%E1%86%B8%20%5B%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%5D.pdf) | 과제 원본 노트북(Colab) · 강의 자료 |
+| `soccer.mp4` | 영상 분석 입력. 원본 `soccer.gif`(437MB)는 GitHub 용량 제한(100MB) 때문에 1280px mp4로 변환해 올림 |
+| `normal.png` | 제조 현장 예시 사진 (PCB 보드) |
 
-- 사용 구현체: [zylo117/Yet-Another-EfficientDet-Pytorch](https://github.com/zylo117/Yet-Another-EfficientDet-Pytorch)
-- 커스텀 데이터: [Kaggle — Vehicle Detection Image Dataset](https://www.kaggle.com/datasets/pkdarabi/vehicle-detection-image-dataset)
+- 데이터: [Kaggle — Vehicle Detection Image Dataset](https://www.kaggle.com/datasets/pkdarabi/vehicle-detection-image-dataset) (Roboflow COCO 형식, 흑백 v9i · 컬러 v8i)
 
 ---
 
-## 🔄 실습 흐름
+## 🧩 EfficientDet은 어떤 모델인가
+
+### 1-stage와 2-stage
+
+| | 2-stage | 1-stage |
+|---|---|---|
+| 방식 | ① 물체가 있을 만한 후보 영역을 먼저 뽑고 ② 후보마다 다시 분류·박스 보정 | 미리 깔아 둔 위치(앵커·격자)마다 클래스와 박스를 **한 번에** 예측 |
+| 대표 모델 | R-CNN, Fast/Faster R-CNN | YOLO, SSD, RetinaNet, **EfficientDet** |
+| 특징 | 정확하지만 느림 | 빠르고, 후처리(NMS)로 겹친 박스를 정리 |
+
+**EfficientDet은 YOLO와 같은 1-stage 모델**이다. RetinaNet처럼 앵커 기반으로, 특징맵 위치마다 앵커 9개(비율 3 × 크기 3)를 깔고 각 앵커의 클래스와 박스 보정값을 한 번에 예측한다.
+이번 실습의 **"2단계 학습"(head만 학습 → 전체 학습)** 은 *학습 방법*이고, 모델 구조의 2-stage와는 다른 이야기다.
+
+### 구조와 YOLO와의 차이
 
 ```
-1. 환경 설정       저장소 clone → D0 사전학습 가중치 → 모델 로드 (COCO 90클래스)
-2. 이미지 추론     전처리(letterbox 512) → forward → 후처리(BBox 변환·Clip·NMS) → 좌표 복원 → 시각화
-3. 영상 추론       프레임 단위로 2번 반복 → 프레임 저장 → mp4 합치기
-4. 데이터 준비     COCO 라벨 확인 → mean/std 계산 → 앵커 분석 → 폴더·json 변환 → yml 작성
-5. 학습            head만 10 epoch → 전체 fine-tuning (중단)
-6. 평가·추론       COCO mAP 평가 → 테스트 이미지 추론
+입력 이미지 → EfficientNet (백본, 특징 추출) → BiFPN (여러 크기 특징 섞기) → class head + box head → NMS
 ```
 
-### 1~2. 사전학습 모델 추론
+| | EfficientDet | YOLOv8 (지난 실습) |
+|---|---|---|
+| 방식 | 1-stage, **앵커 기반** (위치마다 앵커 9개) | 1-stage, 앵커 없음(anchor-free) |
+| 특징 섞기 | **BiFPN** — 위아래 방향으로 여러 번 섞고, 입력마다 가중치를 둠 | PAN-FPN |
+| 크기 조절 | **Compound Scaling** — D0~D7로 입력 크기·깊이·너비를 함께 키움 | n / s / m / l / x |
+| 사용 코드 | 레포의 함수를 단계별로 직접 호출 (전처리 → 추론 → 후처리 → 좌표 복원) | `model.predict()` 한 줄 |
 
-```python
-model = EfficientDetBackbone(compound_coef=0, num_classes=90)   # D0, COCO 90클래스
-model.load_state_dict(torch.load('weights/efficientdet-d0.pth'))
-model.requires_grad_(False); model.eval()                        # 추론 모드
+| 모델 | 입력 크기 | 파라미터 | COCO mAP |
+|---|---|---|---|
+| D0 (이번 실습) | 512 | 3.9M | 33.8 |
+| D1 | 640 | 6.6M | 39.6 |
+| D3 | 896 | 12M | 47.5 |
 
-ori_imgs, framed_imgs, framed_metas = preprocess(img_path, max_size=512)  # 비율 유지 + 패딩
-features, regression, classification, anchors = model(x)
-out = postprocess(x, anchors, regression, classification,
-                  BBoxTransform(), ClipBoxes(), threshold, iou_threshold)  # 박스 변환 + NMS
-out = invert_affine(framed_metas, out)                           # 512 좌표 → 원본 좌표
-```
+---
 
-| 확인한 값 | 의미 |
+## 🔄 실습 흐름과 결과
+
+### Part 1. 사전학습 모델로 이미지 추론
+
+| 단계 | 확인한 값 |
 |---|---|
-| 원본 `(1080, 1920)` → 입력 `(512, 512)` | 가로 기준 축소 후 세로 224px 패딩 |
-| 특징맵 5개: 64→32→16→8→4, 채널 64 | P3~P7 다중 스케일 (BiFPN 출력) |
-| 앵커 **49,104개** = (64²+32²+16²+8²+4²) × 9 | 모든 위치 × (비율 3 × 크기 3) |
-| 최종 박스 **37개** | threshold + NMS로 걸러진 결과 |
+| 전처리 | 1920×1080 → 비율 유지 512×288 + 아래 패딩 224 → 512×512 (`framed_metas = (512, 288, 1920, 1080, 0, 224)`) |
+| 모델 출력 | 특징맵 5개(64·32·16·8·4), 앵커 **49,104개** = (64²+32²+16²+8²+4²) × 9 |
+| 후처리 | 점수 0.2 미만 제거 + NMS → **박스 37개** |
+| 좌표 복원 | `invert_affine`으로 512 기준 좌표를 원본 크기로 |
 
-### 3. 영상 추론
-영상은 이미지의 연속이므로 `cv2.VideoCapture`로 프레임을 읽고 위 과정을 프레임마다 반복 → jpg로 저장 → `cv2.VideoWriter`로 20fps mp4 생성 (`output_soccer.mp4`). 입력 영상은 `soccer.mp4`.
+### Part 2. 영상 분석
+`soccer.gif`(2732×1440, 367프레임)를 프레임마다 같은 과정으로 탐지해 mp4로 합쳤다(RTX 5060에서 3~4분). 사람과 벤치는 잘 잡았지만, 축구공은 512로 줄이면 10픽셀 남짓이 되어 잡지 못했다.
 
-### 4. 커스텀 데이터 준비 (차량 6클래스)
+### Part 3. 차량 데이터 학습·평가
 
-| 항목 | 결과 |
+| 데이터 분석 | 결과 |
 |---|---|
-| RGB mean / std | `[0.464, 0.472, 0.470]` / `[0.165, 0.164, 0.163]` |
-| 박스 수 | 2,069개 (Car 1527 · Motorcycle 281 · Pickup 190 · Truck 47 · Bus 24) |
-| 박스 크기 중앙값 | **17.7px** → 매우 작은 물체 |
-| 추천 앵커 | ratios `[(0.52,1.0),(0.67,1.0),(0.82,1.0)]`, scales `[0.54, 1.0, 2.13]` |
-| obj_list | `['cars', 'Bus', 'Car', 'Motorcycle', 'Pickup', 'Truck']` |
+| RGB 평균 / 표준편차 | `[0.464, 0.472, 0.470]` / `[0.165, 0.164, 0.163]` — 거의 회색조 |
+| 박스 | 2,069개, 크기 중앙값 **17.7px**(작은 물체), 비율 중앙값 0.67(세로로 긴 박스) |
+| 추천 앵커 | 비율 `[(0.52, 1.0), (0.67, 1.0), (0.82, 1.0)]`, 크기 `[0.54, 1.0, 2.13]` |
 
-### 5. 학습
+| 학습 (흑백 train 136장) | 검증 손실 변화 |
+|---|---|
+| 1단계: head만 10에폭 | Classification 13427 → 82, Regression 3.21 → 2.16 |
+| 2단계: 전체 학습 (에폭 10~29) | Classification 17.2 → 0.74, Total 최저 3.03 (24에폭) |
+
+| 평가 (valid, COCO 방식) | 내 컴퓨터 | 원본 Colab |
+|---|---|---|
+| AP @[0.50:0.95] | 0.005 | 0.000 |
+| AP @0.50 | 0.011 | 0.000 |
+| AR @100 (small / medium / large) | 0.027 / 0.198 / 0.331 | 0.002 / 0.097 / 0.104 |
+
+학습은 진행됐지만 차를 거의 맞히지 못했다. 작은 차일수록 못 찾는데, 박스 크기 중앙값(17.7px)이 D0의 가장 작은 앵커(약 17px)와 비슷하거나 더 작고, 학습 데이터도 136장으로 적다. 원본 Colab에서는 2단계 학습이 중간에 끊겨 1단계 가중치로 평가했다.
+
+---
+
+## 🔍 코드 리뷰 요약
+
+리뷰 25개 중 중요한 것부터 정리했다. 항목별 문제·영향·개선 코드는 정리본에서 해당 코드 바로 아래에 있다.
+
+| 중요도 | 항목 | 한 줄 요약 |
+|---|---|---|
+| 🔴 높음 | 3-10 앵커 불일치 | 예측 셀이 학습(yml)과 다른 앵커를 쓴다. 앵커는 가중치에 저장되지 않아 에러 없이 박스가 틀어진다 |
+| 🔴 높음 | 3-4 클래스 이름 밀림 | `obj_list`에 상위 카테고리 `cars`가 들어가 이름이 한 칸씩 밀린다 (레포는 `category_id - 1`을 라벨로 씀) |
+| 🔴 높음 | 3-1 데이터 버전 혼용 | 분석은 컬러, 학습은 흑백, 예측은 다시 컬러로 한다 |
+| 🟠 중간 | 3-3 yml 메모 불일치 | 메모대로 만들면 데이터 폴더를 못 찾고(`project_name`), CPU로 학습한다(`num_gpus: 0`) |
+| 🟠 중간 | 3-5·3-6·3-7 2단계 학습 설정 | 가중치 파일 이름 하드코딩, `--num_epochs 30`이 실제로는 20에폭, 전체 학습도 같은 학습률 |
+| 🟠 중간 | 3-9 valid로만 평가 | test 셋으로 채점하지 않는다 |
+| 🟠 중간 | 2-1 영상 확인 결과 무시 | 영상이 없어도 그대로 진행해 몇 셀 뒤에서야 에러가 난다 |
+| 🟡 낮음 | 1-1·1-2 설정값 미반영 | `compound_coef`, 앵커 변수를 정의만 하고 모델에 넘기지 않는다 |
+| 🟡 낮음 | 2-3·2-4·3-11·3-12 그리기 코드 | 반복문 안 `return`, `display` 두 번 호출, BGR 이미지를 RGB로 표시, `imshow` 위치 |
+| 🟡 낮음 | 1-3·1-6·2-2·2-7·3-2 중복·비효율 | 추론 두 번, 같은 코드 세 번, 모델 재정의, 프레임을 모두 저장했다가 다시 합치기, 폴더 변환 두 번 |
+
+**근거 확인** — 같은 test 사진(정답 36개: Car 28, Motorcycle 4, Pickup 4)으로 비교했다.
+
+| | 탐지 결과 |
+|---|---|
+| 원본 예측 코드 | 14개, **모두 `Bus`** — Car가 `Bus`로 찍히고, 건물·도로를 덮는 큰 박스가 많음 |
+| 앵커·이름·색 고침 | 20개, **모두 `Car`** — 이름이 맞고 일부 박스가 차에 맞게 그려짐 |
+
+공통 원인은 **같은 값을 여러 곳에 손으로 적은 것**이다. 앵커·클래스 목록·데이터 경로·가중치 파일 이름을 yml 하나에서 읽어 쓰게 하면 3-1·3-3·3-4·3-5·3-10이 한꺼번에 해결된다. 다만 고친 뒤에도 성능(AP 0.005)이 낮은 문제는 남는데, 이건 코드 실수가 아니라 작은 물체가 많은 데이터와 적은 학습 데이터 때문으로 본다.
+
+---
+
+## 💻 내 컴퓨터에서 실행하려고 바꾼 곳
+
+원본은 Colab(리눅스)용이라, Windows에서 그대로 안 되는 줄만 바꿨다. 정리본에는 바꾼 줄마다 `# ☁️ 코랩용 (원본)`과 `# 💻 노트북용`을 나란히 적었다. 원본 코드 셀 57개 중 43개는 글자 하나까지 그대로다.
+
+| 원본 (Colab) | 바꾼 코드 | 이유 |
+|---|---|---|
+| `!mkdir -p weights`, `!wget ...` | `!if not exist weights mkdir weights`, `!curl -L ...` | Windows 명령창의 `mkdir`은 `-p`를 모르고, `wget`이 없다 |
+| `!pwd`, `!ls -l`, `!unzip ...`, `ls -Art \| grep` | `os.getcwd()`, `os.listdir`, `zipfile`, `dir /b /od` | Windows 명령창에는 리눅스 명령이 없다 |
+| `soccer.mp4`, `/content/...` 경로 | `soccer.gif`, 레포 기준 상대 경로 | 받은 영상 파일은 gif이고, `/content/`는 Colab에만 있다 |
+| `!pip install` | `%pip install` | `!pip`는 시스템 파이썬에 설치된다 |
+| `! python train.py ...` | `!{sys.executable} train.py ... -n 0` | 시스템 파이썬에는 `pycocotools`가 없다. 워커 12개는 Windows에서 에폭당 3분 넘게 걸려 0으로 줄였다(→ 약 15초) |
+| yml (마크다운 메모) | 파이썬으로 파일 생성, `project_name`·`num_gpus` 수정 | 원본은 파일을 직접 만들었고, 메모 값이 실제 폴더·GPU 설정과 달랐다 |
+
+---
+
+## 🧱 진행하면서 막혔던 부분과 해결
+
+| 막힌 부분 | 원인 | 해결 |
+|---|---|---|
+| 원본 노트북을 내 컴퓨터에서 그대로 실행할 수 없음 | 원본은 Colab용이라 `/content/...` 경로, `wget`, `mkdir -p`가 들어 있다 | 안 되는 곳만 고치고 `☁️ 코랩용`과 `💻 노트북용`을 나란히 표시했다 |
+| `!ls -l`, `!pwd`가 `'ls' is not recognized...` 에러 | Jupyter가 `!` 명령을 Windows 명령창(cmd)으로 실행해서 `ls`·`pwd`·`unzip`·`grep`이 없다. 처음엔 Git Bash에서 시험해 된다고 잘못 판단했다 | `os.getcwd()`, `os.listdir`, `zipfile`, `dir /b /od`로 바꿨다 |
+| `soccer.mp4`가 없음 | 원본 Colab 실행 기록에도 `False`였다. 실제로 쓰인 파일은 `soccer.gif`였다(결과 프레임 크기 2732×1440이 같음) | `soccer.gif`를 받아 `video_src`를 바꿨다 |
+| Colab에서 `frame_00004.jpg`를 찾을 수 없음 | `soccer.gif`를 레포 폴더 밖에 올려서 영상을 못 열었고, `cv2.VideoCapture`는 파일이 없어도 에러 없이 0프레임으로 끝난다 | Colab 실행용 노트북에 영상을 찾아 변환하고 열리는지 확인하는 셀을 넣었다 |
+| yml 메모대로 하면 데이터를 못 찾음 | `project_name`이 폴더 이름과 달랐다 | `my_car_detect_proj`로 맞췄다. 원본 Colab 로그도 이 이름의 폴더에 저장되어 있었다 |
+| `num_gpus: 0`이면 CPU로 학습함 | `train.py`가 0이면 GPU를 끈다 | `num_gpus: 1`로 바꿨다 |
+| 학습이 시작되지 않음 (`UnicodeDecodeError: 'cp949'`) | yml 파일 안에 한글·이모지 주석을 넣었더니 `train.py`가 yml을 cp949로 읽다가 실패했다. `!` 명령은 실패해도 셀이 멈추지 않아 다음 셀에서야 드러났다 | yml은 파이썬으로 쓰고 파일 안에는 원본 영어 주석만 남겼다 |
+| `ReduceLROnPlateau(..., verbose=True)` 에러 | 최신 PyTorch에서 `verbose` 인자가 없어졌다 | 원본 안내대로 지웠다 |
+| 학습이 에폭당 3분 30초 걸림 | 워커 12개를 Windows에서는 에폭마다 새로 띄운다. 그동안 GPU 사용률은 0%였다 | `-n 0`으로 에폭당 약 15초가 됐다 |
+| `! python train.py` 실패 | `python`이 `pycocotools`가 없는 시스템 파이썬을 가리킨다 | `!{sys.executable}`로 커널의 파이썬을 썼다 |
+| PCB 사진 추론에서 `'NoneType' object is not subscriptable` | 커널이 이미 레포 안에 있는 상태에서 `git clone`·`os.chdir`를 다시 실행해 레포가 두 겹으로 받아졌고, 안쪽 사본에는 이미지가 없었다 | 안쪽 사본을 지우고 커널을 재시작해 처음부터 다시 실행했다 |
+
+---
+
+## ⚙️ 실행 환경
+
+| 항목 | 내용 |
+|---|---|
+| 내 컴퓨터 | Windows 11 · Python 3.11 · PyTorch 2.11 (CUDA 12.8) · RTX 5060 Laptop 8GB |
+| 패키지 | `torch torchvision` (cu128), `pycocotools opencv-python matplotlib tqdm tensorboardX webcolors pyyaml` |
+| 준비물 | 레포 clone, `weights/efficientdet-d0.pth`, `datasets/archive.zip`(Kaggle), `soccer.gif` |
+
+RTX 50 시리즈는 CUDA 12.8 빌드가 필요해서 PyTorch를 아래처럼 설치했다.
 
 ```bash
-# 1단계: backbone·BiFPN 고정, head만 학습
-python train.py -c 0 -p my_car_detect_proj --head_only True --lr 1e-3 --batch_size 16 \
-       --load_weights weights/efficientdet-d0.pth --num_epochs 10
-# 2단계: 전체 fine-tuning (속도 문제로 첫 step에서 중단)
-python train.py -c 0 -p my_car_detect_proj --head_only False ... --num_epochs 30
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
 ```
-
-| Epoch | 0~1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-|---|---|---|---|---|---|---|---|---|---|
-| Val Total loss | – | 5805 | 2687 | 1215 | 528 | 275 | 175 | 132 | **110** |
-
-- head 크기가 COCO(90×9=810채널) → 커스텀(6×9=54채널)으로 바뀌어 그 층만 새로 초기화됨 (`size mismatch` 경고는 정상)
-
-### 6. 평가
-
-| 지표 | 값 |
-|---|---|
-| AP @[0.50:0.95] | **0.000** |
-| AP @0.50 | 0.000 |
-| AP (small / medium / large) | 0.000 / 0.002 / 0.068 |
-| AR @100 | 0.042 |
-
----
-
-## 📊 결과 분석 및 개선 방안
-
-loss는 꾸준히 줄었지만 AP는 0. 코드를 따라가며 찾은 원인 후보:
-
-| # | 문제 | 개선 방안 |
-|---|---|---|
-| 1 | **학습·추론 앵커 불일치** — 학습(yml) `[(0.52,1.0),(0.67,1.0),(0.82,1.0)]` vs 추론 코드 `[(1.0,1.0),(1.3,0.8),(1.9,0.5)]` | 추론에도 yml과 같은 ratios/scales 사용 |
-| 2 | **분석·학습·테스트 데이터 버전이 다름** — 분석은 컬러(v8i), 학습은 흑백(v9i), 테스트는 컬러(v8i) | 한 가지 버전으로 통일 |
-| 3 | **학습량 부족** — head만 10 epoch, 전체 학습은 중단. yml `num_gpus: 0`이면 CPU로 학습됨 | GPU 사용 후 충분히 학습 |
-| 4 | **obj_list의 `'cars'`** — 저장소는 `category_id - 1`을 라벨로 사용 → 클래스 이름이 한 칸 밀릴 수 있음 | `'cars'` 제거 (5클래스) |
-| 5 | **작은 물체 + 클래스 불균형** | 입력 해상도 키우기(D1~D2), 증강, 불균형 보정 |
-| 6 | 변환한 json을 원본 복사 셀이 다시 덮어씀 | 하나만 실행 |
-
-> classification loss가 수천 단위로 시작한 것도(보통 1 안팎) 앵커·라벨 설정이 데이터와 맞지 않았다는 신호로 보인다.
-
----
-
-## ✍️ 느낀 점
-
-**1. 사전학습 모델의 위력**
-코드 몇 줄과 15MB짜리 가중치만으로 처음 보는 이미지와 축구 영상에서 사람·공을 바로 잡아내는 것이 인상적이었다. 4만 9천 개의 앵커 후보가 후처리를 거쳐 37개로 줄어드는 과정을 직접 출력해 보며 "탐지 모델 = 후보를 많이 깔고 걸러내는 구조"라는 것을 숫자로 이해했다.
-
-**2. 데이터 준비가 학습보다 어렵다**
-`train.py` 실행은 한 줄이었지만, 그 한 줄을 위해 폴더 구조, COCO json 변환, mean/std, 앵커 분석, yml 작성까지 훨씬 많은 준비가 필요했다. 경로나 데이터 버전 하나만 달라도 결과가 완전히 달라질 수 있다는 걸 체감했다.
-
-**3. 학습 결과의 아쉬움 — 일관성의 중요성**
-loss가 5805 → 110으로 줄어 잘 되는 줄 알았지만 AP는 0이었다. 학습과 추론의 앵커가 달랐고, 분석한 데이터와 학습한 데이터도 달랐다. **"loss 감소 ≠ 좋은 모델"**, 그리고 학습·추론·평가에서 설정을 똑같이 유지하는 것의 중요성을 배웠다. 다음에는 설정을 통일하고 GPU로 충분히 학습해 결과를 비교해 보고 싶다.
-
-**4. 제조 현장 적용 가능성**
-PCB 사진(`normal.png`)처럼 제조 현장 이미지에 적용하면 부품 누락·불량 위치 탐지에 쓸 수 있을 것 같다. PCB 부품·결함도 이번 차량처럼 **작은 물체**라서 앵커 분석과 입력 해상도 조절이 그대로 중요하고, D0처럼 가벼운 모델은 실시간 라인 검사에도 활용할 수 있을 것이다.
-
----
-
-## 🛠 작업 기록
-
-### 1. 실습 정리
-- 원본 노트북의 코드·출력은 그대로 두고, 모든 코드 셀 아래에 `💬 코멘트`를 단 **정리본**을 만들었다.
-- 결과(AP 0.000)의 원인을 코드에서 찾아 **결과 분석 및 개선 방안**으로 정리하고, 느낀 점을 덧붙였다.
-
-### 2. 다시 실행했을 때 "이미지가 없다"는 에러가 난 원인
-원본 노트북은 `git clone`으로 받을 수 없는 파일을 **직접 업로드한 상태**에서 실행한 것이라, 처음부터 다시 돌리면 파일을 찾지 못했다.
-
-| 없던 파일 | 쓰는 곳 | 증상 |
-|---|---|---|
-| `soccer.mp4` | 영상 추론 | 프레임이 저장되지 않아 `frame_00004.jpg`를 찾지 못함 |
-| `datasets/archive.zip` | 커스텀 데이터 | "이미지를 불러올 수 없습니다", 경로 에러 |
-| `projects/my_car_detect_proj.yml` | 학습·평가 | yml은 화면 캡처로만 남아 있어서 파일이 없음 |
-
-그 밖에 런타임이 초기화되면 파일이 지워지는 점, 셀을 다시 실행하면 경로가 꼬이는 점(`os.chdir`, `%cd`, `img_path` 덮어쓰기)도 원인이었다.
-
-### 3. `soccer.gif`의 정체
-처음에는 `soccer.gif`를 탐지 결과로 생각했지만, 프레임을 확인해 보니 **탐지 박스가 없는 입력 영상**이었다(`soccer.mp4`를 GIF로 바꿔 둔 것).
-- 원본 노트북에 저장된 결과 프레임 크기(2732×1440)가 GIF와 같아서, 원본 실행 때도 이 영상을 썼다는 것을 확인했다. 단, 원본 실행에서 저장된 프레임은 7장뿐이라 그때 결과 영상(`output_soccer.mp4`)은 약 0.35초 분량이었다.
-- 437MB라 GitHub에 올릴 수 없어서(파일당 100MB 제한) **1280px · 25fps H.264 mp4(5.6MB)로 변환**해 `soccer.mp4`로 올렸다.
-- **원본과 해상도가 다른 것은 용량 제한 때문에 어쩔 수 없었다.** 다만 모델 입력은 어차피 512px로 줄어들기 때문에 탐지 결과에는 거의 영향이 없다.
-
-### 3-1. Colab에서 실제로 겪은 에러 — `frame_00004.jpg`를 찾을 수 없음
-| 단계 | 내용 |
-|---|---|
-| 증상 | `os.listdir(output_dir)` 결과가 `[]`, 다음 셀에서 `FileNotFoundError: .../output_soccer_frames/frame_00004.jpg` |
-| 원인 | `soccer.gif`를 `Yet-Another-EfficientDet-Pytorch` 폴더 **밖**(`/content` 바로 아래)에 올렸고, 원본 코드는 폴더 **안**의 `soccer.mp4`를 찾음 → 영상을 못 열어 루프가 **에러 없이 0프레임으로 끝남** |
-| 해결 | 영상 루프 위 🔧 셀이 `soccer.gif`를 폴더 안 / `/content` 어디에 있든 찾아서 원본 해상도(2732×1440) `soccer.mp4`로 변환 → 루프 셀부터 다시 실행 |
-| 교훈 | `cv2.VideoCapture`는 파일이 없어도 에러를 내지 않으므로, 루프 전에 `cap.isOpened()`로 확인해야 한다 |
-
-이어서 `output_dir`가 없다는 `NameError`도 났다. 영상 파트 변수는 `# Core Author: Zylo117` 셀에서 만들어지는데, 셀을 건너뛰거나 런타임이 재시작되면 사라진다. → 노트북 상단에 영상 파트 **실행 순서**를 명시했다.
-
-### 4. Colab 실행용 노트북 (`EfficientDet_Colab.ipynb`)
-처음에는 여러 셀을 한꺼번에 고쳤지만, **원본 흐름을 최대한 따라가는 것이 좋다**고 판단해서 방식을 바꿨다.
-→ 원본 코드 셀 57개는 **내용·순서 그대로** 두고, 처음부터 실행할 때 막히는 셀 **바로 위에 `🔧 [추가]` 셀만** 넣었다.
-
-| 막히는 원본 셀 | 원인 | 위에 추가한 것 |
-|---|---|---|
-| (노트북 맨 위 안내) | `soccer.mp4`가 없음 | 저장소의 `soccer.mp4`를 받아 `Yet-Another-EfficientDet-Pytorch` 폴더에 업로드하도록 안내 |
-| `# Video capture` 루프 | 영상을 못 열면 0프레임으로 끝나 뒤의 `frame_00004.jpg`에서 에러 | `soccer.gif`를 올렸으면 원본 해상도 mp4로 변환, 없으면 저장소의 `soccer.mp4`를 받은 뒤 열리는지 확인 |
-| `!unzip ./datasets/archive.zip ...` | `archive.zip`이 없음 | Kaggle에서 자동 다운로드 (로그인 불필요) |
-| `train.py` 실행 | yml 파일이 캡처로만 있음 | `%%writefile`로 원본 yml 내용 그대로 생성 (`project_name`을 실제 폴더명으로, `num_gpus`를 1로만 변경) |
-| `train.py` 실행 | 최신 PyTorch의 `verbose=True` 에러 | 원본 안내와 같은 수정을 `sed`로 자동 적용 |
-| 2단계 학습 | `d0_9_80.pth` 파일명을 직접 지정 | 저장된 가중치 목록을 먼저 확인 |
-
-- 빈 셀과 이미지 파일이 없는 캡처 셀만 뺐다.
-- AP 0.000의 원인(앵커 불일치, 데이터 버전 혼용 등)은 원본 그대로 두었다. 분석과 개선 방안은 정리본에 있다.
-
-**검증 범위**: 모든 코드 셀 문법 검사, 원본 코드 셀 57개 보존 확인, 새 환경 기준으로 데이터 다운로드 → 압축 해제 → 변환 → yml 생성까지 실제 실행 확인. 학습·평가·추론은 GPU 환경(Colab)에서 실행 필요.
