@@ -11,7 +11,7 @@
 | [`4. EfficientDet 실습 [프로젝트].ipynb`](./4.%20EfficientDet%20실습%20[프로젝트].ipynb) | 원본 실습 노트북 (Colab 실행) |
 | `4. EfficientDet 실습 [프로젝트].pdf` | 강의 자료 — EfficientDet 기반 제조 영상 분석 최적화 |
 | `normal.png` | 제조 영상 예시 (PCB 보드) |
-| `soccer.gif` | 축구 영상 객체 탐지 결과 *(437MB로 GitHub 용량 제한을 넘어서 저장소에는 올리지 않음)* |
+| `soccer.mp4` | 영상 추론 실습의 **입력 영상** (축구). 원본 `soccer.gif`(437MB)를 1280px mp4로 변환 — 아래 [작업 기록](#-작업-기록) 참고 |
 
 - 사용 구현체: [zylo117/Yet-Another-EfficientDet-Pytorch](https://github.com/zylo117/Yet-Another-EfficientDet-Pytorch)
 - 커스텀 데이터: [Kaggle — Vehicle Detection Image Dataset](https://www.kaggle.com/datasets/pkdarabi/vehicle-detection-image-dataset)
@@ -51,7 +51,7 @@ out = invert_affine(framed_metas, out)                           # 512 좌표 �
 | 최종 박스 **37개** | threshold + NMS로 걸러진 결과 |
 
 ### 3. 영상 추론
-영상은 이미지의 연속이므로 `cv2.VideoCapture`로 프레임을 읽고 위 과정을 프레임마다 반복 → jpg로 저장 → `cv2.VideoWriter`로 20fps mp4 생성. 결과는 `soccer.gif`.
+영상은 이미지의 연속이므로 `cv2.VideoCapture`로 프레임을 읽고 위 과정을 프레임마다 반복 → jpg로 저장 → `cv2.VideoWriter`로 20fps mp4 생성 (`output_soccer.mp4`). 입력 영상은 `soccer.mp4`.
 
 ### 4. 커스텀 데이터 준비 (차량 6클래스)
 
@@ -120,3 +120,39 @@ loss가 5805 → 110으로 줄어 잘 되는 줄 알았지만 AP는 0이었다. 
 
 **4. 제조 현장 적용 가능성**
 PCB 사진(`normal.png`)처럼 제조 현장 이미지에 적용하면 부품 누락·불량 위치 탐지에 쓸 수 있을 것 같다. PCB 부품·결함도 이번 차량처럼 **작은 물체**라서 앵커 분석과 입력 해상도 조절이 그대로 중요하고, D0처럼 가벼운 모델은 실시간 라인 검사에도 활용할 수 있을 것이다.
+
+---
+
+## 🛠 작업 기록
+
+### 1. 실습 정리
+- 원본 노트북의 코드·출력은 그대로 두고, 모든 코드 셀 아래에 `💬 코멘트`를 단 **정리본**을 만들었다.
+- 결과(AP 0.000)의 원인을 코드에서 찾아 **결과 분석 및 개선 방안**으로 정리하고, 느낀 점을 덧붙였다.
+
+### 2. 다시 실행했을 때 "이미지가 없다"는 에러가 난 원인
+원본 노트북은 `git clone`으로 받을 수 없는 파일을 **직접 업로드한 상태**에서 실행한 것이라, 처음부터 다시 돌리면 파일을 찾지 못했다.
+
+| 없던 파일 | 쓰는 곳 | 증상 |
+|---|---|---|
+| `soccer.mp4` | 영상 추론 | 프레임이 저장되지 않아 `frame_00004.jpg`를 찾지 못함 |
+| `datasets/archive.zip` | 커스텀 데이터 | "이미지를 불러올 수 없습니다", 경로 에러 |
+| `projects/my_car_detect_proj.yml` | 학습·평가 | yml은 화면 캡처로만 남아 있어서 파일이 없음 |
+
+그 밖에 런타임이 초기화되면 파일이 지워지는 점, 셀을 다시 실행하면 경로가 꼬이는 점(`os.chdir`, `%cd`, `img_path` 덮어쓰기)도 원인이었다.
+
+### 3. `soccer.gif`의 정체
+처음에는 `soccer.gif`를 탐지 결과로 생각했지만, 프레임을 확인해 보니 **탐지 박스가 없는 입력 영상**이었다(`soccer.mp4`를 GIF로 바꿔 둔 것).
+- 437MB라 GitHub에 올릴 수 없어서(파일당 100MB 제한) **1280px · 25fps H.264 mp4(5.6MB)로 변환**해 `soccer.mp4`로 올렸다.
+- **원본과 해상도가 다른 것은 용량 제한 때문에 어쩔 수 없었다.** 다만 모델 입력은 어차피 512px로 줄어들기 때문에 탐지 결과에는 거의 영향이 없다.
+
+### 4. Colab 실행용 노트북 (`EfficientDet_Colab.ipynb`)
+파일 업로드 없이 `런타임 → 모두 실행`만으로 끝까지 돌아가도록 수정했다. 수정한 셀에는 `# ✏️ 수정:` 표시가 있다.
+
+| 구분 | 수정 내용 |
+|---|---|
+| 파일 자동 준비 | `soccer.mp4`는 이 저장소에서, 차량 데이터는 Kaggle에서 자동 다운로드 (로그인 불필요). yml은 계산한 mean/std·앵커·클래스로 자동 생성 |
+| 실행 에러 | `train.py`의 `verbose=True` 에러 자동 패치, 가중치 URL 오타 수정, 다시 실행해도 안전하게(clone·경로·변수 덮어쓰기), GPU 유무 자동 판단 |
+| 결과 개선 | 데이터 버전 통일(컬러 v8i), 학습·추론 앵커 일치, `obj_list`에서 빈 카테고리 `'cars'` 제거(5클래스), GPU가 있으면 `num_gpus: 1` |
+| 편의 | 결과 영상을 노트북 안에서 바로 재생, 2단계 학습은 최근 가중치 자동 로드 |
+
+**검증 범위**: 모든 코드 셀 문법 검사, 데이터 다운로드 → 변환 → yml 생성까지 실제 실행 확인. 학습·평가·추론은 GPU 환경(Colab)에서 실행 필요.
