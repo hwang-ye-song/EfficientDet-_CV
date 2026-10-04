@@ -6,9 +6,9 @@ EfficientDet-D0([zylo117/Yet-Another-EfficientDet-Pytorch](https://github.com/zy
 ## ✅ 최종 정리본
 
 - 📓 [EfficientDet_실습_코드리뷰.ipynb](EfficientDet_실습_코드리뷰.ipynb) — 실행 결과 포함
-- 📄 [EfficientDet_실습_코드리뷰.pdf](EfficientDet_실습_코드리뷰.pdf) — 표지 포함 49쪽
+- 📄 [EfficientDet_실습_코드리뷰.pdf](EfficientDet_실습_코드리뷰.pdf) — 표지 포함 48쪽
 
-원본 코드를 **순서 그대로** 실행하며 코드마다 아래에 의미를 정리했고, 고칠 점이 있는 코드는 **바로 아래에 🔍 코드 리뷰**(25개)를 붙였습니다.
+원본 코드를 **순서 그대로** 실행하며 코드마다 아래에 의미를 정리했고, 고칠 점이 있는 코드는 **바로 아래에 🔍 코드 리뷰**를 붙였습니다(Part 1·2, 13개).
 진행하면서 막혔던 부분과 해결, 개인 회고는 [`개인회고.ipynb`](개인회고.ipynb) / [`.pdf`](개인회고.pdf)에 따로 정리했습니다.
 
 ## 📁 파일 구성
