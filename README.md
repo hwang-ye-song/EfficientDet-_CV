@@ -6,16 +6,17 @@ EfficientDet-D0([zylo117/Yet-Another-EfficientDet-Pytorch](https://github.com/zy
 ## ✅ 최종 정리본
 
 - 📓 [EfficientDet_실습_코드리뷰.ipynb](EfficientDet_실습_코드리뷰.ipynb) — 실행 결과 포함
-- 📄 [EfficientDet_실습_코드리뷰.pdf](EfficientDet_실습_코드리뷰.pdf) — 표지 포함 57쪽
+- 📄 [EfficientDet_실습_코드리뷰.pdf](EfficientDet_실습_코드리뷰.pdf) — 표지 포함 49쪽
 
-원본 코드를 **순서 그대로** 실행하며 코드마다 아래에 의미를 정리했고, 고칠 점이 있는 코드는 **바로 아래에 🔍 코드 리뷰**(문제 → 영향 → 개선안, 25개)를 붙였습니다.
-맨 끝에는 코드 리뷰 종합, 목표 기준 평가, 진행하면서 막혔던 부분과 해결, **개인 회고**가 있습니다.
+원본 코드를 **순서 그대로** 실행하며 코드마다 아래에 의미를 정리했고, 고칠 점이 있는 코드는 **바로 아래에 🔍 코드 리뷰**(25개)를 붙였습니다.
+진행하면서 막혔던 부분과 해결, 개인 회고는 [`개인회고.md`](개인회고.md)에 따로 정리했습니다.
 
 ## 📁 파일 구성
 
 | 파일 | 설명 |
 |---|---|
-| [`EfficientDet_실습_코드리뷰.ipynb`](EfficientDet_실습_코드리뷰.ipynb) / [`.pdf`](EfficientDet_실습_코드리뷰.pdf) | **최종 정리본** — 내 컴퓨터에서 실행, 코드 설명 + 코드 리뷰 + 개인 회고 |
+| [`EfficientDet_실습_코드리뷰.ipynb`](EfficientDet_실습_코드리뷰.ipynb) / [`.pdf`](EfficientDet_실습_코드리뷰.pdf) | **최종 정리본** — 내 컴퓨터에서 실행, 코드 설명 + 코드 리뷰 |
+| [`개인회고.md`](개인회고.md) | 진행하면서 막혔던 부분과 해결, 개인 회고 |
 | [`4. EfficientDet 실습 [프로젝트].ipynb`](4.%20EfficientDet%20%E1%84%89%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B3%E1%86%B8%20%5B%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%5D.ipynb) | 과제 원본 노트북(Colab) |
 | `soccer.mp4` | 영상 분석 입력. 원본 `soccer.gif`(437MB)는 GitHub 용량 제한(100MB) 때문에 1280px mp4로 변환해 올림 |
 | `normal.png` | 제조 현장 예시 사진 (PCB 보드) |
