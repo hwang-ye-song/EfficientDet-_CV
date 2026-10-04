@@ -142,6 +142,7 @@ PCB 사진(`normal.png`)처럼 제조 현장 이미지에 적용하면 부품 �
 
 ### 3. `soccer.gif`의 정체
 처음에는 `soccer.gif`를 탐지 결과로 생각했지만, 프레임을 확인해 보니 **탐지 박스가 없는 입력 영상**이었다(`soccer.mp4`를 GIF로 바꿔 둔 것).
+- 원본 노트북에 저장된 결과 프레임 크기(2732×1440)가 GIF와 같아서, 원본 실행 때도 이 영상을 썼다는 것을 확인했다. 단, 원본 실행에서 저장된 프레임은 7장뿐이라 그때 결과 영상(`output_soccer.mp4`)은 약 0.35초 분량이었다.
 - 437MB라 GitHub에 올릴 수 없어서(파일당 100MB 제한) **1280px · 25fps H.264 mp4(5.6MB)로 변환**해 `soccer.mp4`로 올렸다.
 - **원본과 해상도가 다른 것은 용량 제한 때문에 어쩔 수 없었다.** 다만 모델 입력은 어차피 512px로 줄어들기 때문에 탐지 결과에는 거의 영향이 없다.
 
@@ -152,7 +153,7 @@ PCB 사진(`normal.png`)처럼 제조 현장 이미지에 적용하면 부품 �
 | 막히는 원본 셀 | 원인 | 위에 추가한 것 |
 |---|---|---|
 | (노트북 맨 위 안내) | `soccer.mp4`가 없음 | 저장소의 `soccer.mp4`를 받아 `Yet-Another-EfficientDet-Pytorch` 폴더에 업로드하도록 안내 |
-| `# Video capture` 루프 | 영상을 못 열면 0프레임으로 끝나 뒤의 `frame_00004.jpg`에서 에러 | 영상이 열리는지 확인하고, 없거나 덜 올라갔으면 다시 받기 |
+| `# Video capture` 루프 | 영상을 못 열면 0프레임으로 끝나 뒤의 `frame_00004.jpg`에서 에러 | `soccer.gif`를 올렸으면 원본 해상도 mp4로 변환, 없으면 저장소의 `soccer.mp4`를 받은 뒤 열리는지 확인 |
 | `!unzip ./datasets/archive.zip ...` | `archive.zip`이 없음 | Kaggle에서 자동 다운로드 (로그인 불필요) |
 | `train.py` 실행 | yml 파일이 캡처로만 있음 | `%%writefile`로 원본 yml 내용 그대로 생성 (`project_name`을 실제 폴더명으로, `num_gpus`를 1로만 변경) |
 | `train.py` 실행 | 최신 PyTorch의 `verbose=True` 에러 | 원본 안내와 같은 수정을 `sed`로 자동 적용 |
