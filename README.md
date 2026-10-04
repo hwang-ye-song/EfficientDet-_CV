@@ -152,6 +152,7 @@ PCB 사진(`normal.png`)처럼 제조 현장 이미지에 적용하면 부품 �
 | 막히는 원본 셀 | 원인 | 위에 추가한 것 |
 |---|---|---|
 | (노트북 맨 위 안내) | `soccer.mp4`가 없음 | 저장소의 `soccer.mp4`를 받아 `Yet-Another-EfficientDet-Pytorch` 폴더에 업로드하도록 안내 |
+| `# Video capture` 루프 | 영상을 못 열면 0프레임으로 끝나 뒤의 `frame_00004.jpg`에서 에러 | 영상이 열리는지 확인하고, 없거나 덜 올라갔으면 다시 받기 |
 | `!unzip ./datasets/archive.zip ...` | `archive.zip`이 없음 | Kaggle에서 자동 다운로드 (로그인 불필요) |
 | `train.py` 실행 | yml 파일이 캡처로만 있음 | `%%writefile`로 원본 yml 내용 그대로 생성 (`project_name`을 실제 폴더명으로, `num_gpus`를 1로만 변경) |
 | `train.py` 실행 | 최신 PyTorch의 `verbose=True` 에러 | 원본 안내와 같은 수정을 `sed`로 자동 적용 |
