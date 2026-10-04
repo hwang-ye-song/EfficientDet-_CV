@@ -6,6 +6,7 @@
 
 | 파일 | 설명 |
 |---|---|
+| [`EfficientDet_Colab.ipynb`](./EfficientDet_Colab.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hwang-ye-song/EfficientDet-_CV/blob/main/EfficientDet_Colab.ipynb) | **Colab 실행용** — 파일 업로드 없이 처음부터 끝까지 실행되도록 수정한 버전 (수정한 곳은 `# ✏️ 수정:` 표시) |
 | [`4. EfficientDet 실습 [정리본].ipynb`](./4.%20EfficientDet%20실습%20[정리본].ipynb) | **정리본** — 원본 코드·출력 그대로 + 각 셀 아래 `💬 코멘트`, 결과 분석, 느낀 점 |
 | [`4. EfficientDet 실습 [프로젝트].ipynb`](./4.%20EfficientDet%20실습%20[프로젝트].ipynb) | 원본 실습 노트북 (Colab 실행) |
 | `4. EfficientDet 실습 [프로젝트].pdf` | 강의 자료 — EfficientDet 기반 제조 영상 분석 최적화 |
