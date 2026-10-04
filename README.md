@@ -1,7 +1,7 @@
 # EfficientDet 실습 — 실습 코드 정리와 코드 리뷰
 
 EfficientDet-D0([zylo117/Yet-Another-EfficientDet-Pytorch](https://github.com/zylo117/Yet-Another-EfficientDet-Pytorch))로 **사전학습 모델 추론 → 영상 분석 → 차량 데이터 학습·평가**를 진행하고, 실습 코드를 리뷰한 레포입니다.
-과제 원본 자료(Colab 노트북 + 강의 PDF)를 바탕으로, 내 컴퓨터(Windows · RTX 5060)에서 처음부터 끝까지 실행했습니다.
+과제 원본 노트북(Colab)과 강의 내용을 바탕으로, 내 컴퓨터(Windows · RTX 5060)에서 처음부터 끝까지 실행했습니다.
 
 ## ✅ 최종 정리본
 
@@ -18,7 +18,7 @@ EfficientDet-D0([zylo117/Yet-Another-EfficientDet-Pytorch](https://github.com/zy
 | [`EfficientDet_실습_코드리뷰.ipynb`](EfficientDet_실습_코드리뷰.ipynb) / [`.pdf`](EfficientDet_실습_코드리뷰.pdf) | **최종 정리본** — 내 컴퓨터에서 실행, 코드 설명 + 코드 리뷰 + 개인 회고 |
 | [`EfficientDet_Colab.ipynb`](EfficientDet_Colab.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hwang-ye-song/EfficientDet-_CV/blob/main/EfficientDet_Colab.ipynb) | Colab 실행용 — 원본 코드는 그대로 두고, 막히는 셀 위에만 `🔧 [추가]` 셀을 넣은 버전 |
 | [`4. EfficientDet 실습 [정리본].ipynb`](4.%20EfficientDet%20%EC%8B%A4%EC%8A%B5%20%5B%EC%A0%95%EB%A6%AC%EB%B3%B8%5D.ipynb) | 이전 정리본 — 원본 Colab 실행 결과에 `💬 코멘트`를 단 버전 |
-| [`4. EfficientDet 실습 [프로젝트].ipynb`](4.%20EfficientDet%20%E1%84%89%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B3%E1%86%B8%20%5B%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%5D.ipynb) / [`.pdf`](4.%20EfficientDet%20%E1%84%89%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B3%E1%86%B8%20%5B%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%5D.pdf) | 과제 원본 노트북(Colab) · 강의 자료 |
+| [`4. EfficientDet 실습 [프로젝트].ipynb`](4.%20EfficientDet%20%E1%84%89%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B3%E1%86%B8%20%5B%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%5D.ipynb) | 과제 원본 노트북(Colab) |
 | `soccer.mp4` | 영상 분석 입력. 원본 `soccer.gif`(437MB)는 GitHub 용량 제한(100MB) 때문에 1280px mp4로 변환해 올림 |
 | `normal.png` | 제조 현장 예시 사진 (PCB 보드) |
 
