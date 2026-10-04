@@ -16,8 +16,6 @@ EfficientDet-D0([zylo117/Yet-Another-EfficientDet-Pytorch](https://github.com/zy
 | 파일 | 설명 |
 |---|---|
 | [`EfficientDet_실습_코드리뷰.ipynb`](EfficientDet_실습_코드리뷰.ipynb) / [`.pdf`](EfficientDet_실습_코드리뷰.pdf) | **최종 정리본** — 내 컴퓨터에서 실행, 코드 설명 + 코드 리뷰 + 개인 회고 |
-| [`EfficientDet_Colab.ipynb`](EfficientDet_Colab.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hwang-ye-song/EfficientDet-_CV/blob/main/EfficientDet_Colab.ipynb) | Colab 실행용 — 원본 코드는 그대로 두고, 막히는 셀 위에만 `🔧 [추가]` 셀을 넣은 버전 |
-| [`4. EfficientDet 실습 [정리본].ipynb`](4.%20EfficientDet%20%EC%8B%A4%EC%8A%B5%20%5B%EC%A0%95%EB%A6%AC%EB%B3%B8%5D.ipynb) | 이전 정리본 — 원본 Colab 실행 결과에 `💬 코멘트`를 단 버전 |
 | [`4. EfficientDet 실습 [프로젝트].ipynb`](4.%20EfficientDet%20%E1%84%89%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B3%E1%86%B8%20%5B%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%5D.ipynb) | 과제 원본 노트북(Colab) |
 | `soccer.mp4` | 영상 분석 입력. 원본 `soccer.gif`(437MB)는 GitHub 용량 제한(100MB) 때문에 1280px mp4로 변환해 올림 |
 | `normal.png` | 제조 현장 예시 사진 (PCB 보드) |
@@ -147,7 +145,6 @@ EfficientDet-D0([zylo117/Yet-Another-EfficientDet-Pytorch](https://github.com/zy
 | 원본 노트북을 내 컴퓨터에서 그대로 실행할 수 없음 | 원본은 Colab용이라 `/content/...` 경로, `wget`, `mkdir -p`가 들어 있다 | 안 되는 곳만 고치고 `☁️ 코랩용`과 `💻 노트북용`을 나란히 표시했다 |
 | `!ls -l`, `!pwd`가 `'ls' is not recognized...` 에러 | Jupyter가 `!` 명령을 Windows 명령창(cmd)으로 실행해서 `ls`·`pwd`·`unzip`·`grep`이 없다. 처음엔 Git Bash에서 시험해 된다고 잘못 판단했다 | `os.getcwd()`, `os.listdir`, `zipfile`, `dir /b /od`로 바꿨다 |
 | `soccer.mp4`가 없음 | 원본 Colab 실행 기록에도 `False`였다. 실제로 쓰인 파일은 `soccer.gif`였다(결과 프레임 크기 2732×1440이 같음) | `soccer.gif`를 받아 `video_src`를 바꿨다 |
-| Colab에서 `frame_00004.jpg`를 찾을 수 없음 | `soccer.gif`를 레포 폴더 밖에 올려서 영상을 못 열었고, `cv2.VideoCapture`는 파일이 없어도 에러 없이 0프레임으로 끝난다 | Colab 실행용 노트북에 영상을 찾아 변환하고 열리는지 확인하는 셀을 넣었다 |
 | yml 메모대로 하면 데이터를 못 찾음 | `project_name`이 폴더 이름과 달랐다 | `my_car_detect_proj`로 맞췄다. 원본 Colab 로그도 이 이름의 폴더에 저장되어 있었다 |
 | `num_gpus: 0`이면 CPU로 학습함 | `train.py`가 0이면 GPU를 끈다 | `num_gpus: 1`로 바꿨다 |
 | 학습이 시작되지 않음 (`UnicodeDecodeError: 'cp949'`) | yml 파일 안에 한글·이모지 주석을 넣었더니 `train.py`가 yml을 cp949로 읽다가 실패했다. `!` 명령은 실패해도 셀이 멈추지 않아 다음 셀에서야 드러났다 | yml은 파이썬으로 쓰고 파일 안에는 원본 영어 주석만 남겼다 |
