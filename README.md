@@ -6,15 +6,16 @@ EfficientDet-D0([zylo117/Yet-Another-EfficientDet-Pytorch](https://github.com/zy
 ## ✅ 최종 정리본
 
 - 📓 [EfficientDet_실습_코드리뷰.ipynb](EfficientDet_실습_코드리뷰.ipynb) — 실행 결과 포함
-- 📄 [EfficientDet_실습_코드리뷰.pdf](EfficientDet_실습_코드리뷰.pdf) — 표지 포함 59쪽
+- 📄 [EfficientDet_실습_코드리뷰.pdf](EfficientDet_실습_코드리뷰.pdf) — 표지 포함 61쪽
 
 원본 코드를 **순서 그대로** 실행하며 코드마다 아래에 의미를 정리했고, 고칠 점이 있는 코드는 **바로 아래에 🔍 코드 리뷰**(문제 → 영향 → 개선안, 25개)를 붙였습니다. 주요 문제는 실행 결과로 근거를 확인했습니다.
+맨 끝에는 코드 리뷰 종합, 목표 기준 평가, 진행하면서 막혔던 부분과 해결, **개인 회고**가 있습니다.
 
 ## 📁 파일 구성
 
 | 파일 | 설명 |
 |---|---|
-| [`EfficientDet_실습_코드리뷰.ipynb`](EfficientDet_실습_코드리뷰.ipynb) / [`.pdf`](EfficientDet_실습_코드리뷰.pdf) | **최종 정리본** — 내 컴퓨터에서 실행, 코드 설명 + 코드 리뷰 |
+| [`EfficientDet_실습_코드리뷰.ipynb`](EfficientDet_실습_코드리뷰.ipynb) / [`.pdf`](EfficientDet_실습_코드리뷰.pdf) | **최종 정리본** — 내 컴퓨터에서 실행, 코드 설명 + 코드 리뷰 + 개인 회고 |
 | [`EfficientDet_Colab.ipynb`](EfficientDet_Colab.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hwang-ye-song/EfficientDet-_CV/blob/main/EfficientDet_Colab.ipynb) | Colab 실행용 — 원본 코드는 그대로 두고, 막히는 셀 위에만 `🔧 [추가]` 셀을 넣은 버전 |
 | [`4. EfficientDet 실습 [정리본].ipynb`](4.%20EfficientDet%20%EC%8B%A4%EC%8A%B5%20%5B%EC%A0%95%EB%A6%AC%EB%B3%B8%5D.ipynb) | 이전 정리본 — 원본 Colab 실행 결과에 `💬 코멘트`를 단 버전 |
 | [`4. EfficientDet 실습 [프로젝트].ipynb`](4.%20EfficientDet%20%E1%84%89%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B3%E1%86%B8%20%5B%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%5D.ipynb) / [`.pdf`](4.%20EfficientDet%20%E1%84%89%E1%85%B5%E1%86%AF%E1%84%89%E1%85%B3%E1%86%B8%20%5B%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%5D.pdf) | 과제 원본 노트북(Colab) · 강의 자료 |
