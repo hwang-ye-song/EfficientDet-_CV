@@ -6,7 +6,7 @@
 
 | 파일 | 설명 |
 |---|---|
-| [`EfficientDet_Colab.ipynb`](./EfficientDet_Colab.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hwang-ye-song/EfficientDet-_CV/blob/main/EfficientDet_Colab.ipynb) | **Colab 실행용** — 파일 업로드 없이 처음부터 끝까지 실행되도록 수정한 버전 (수정한 곳은 `# ✏️ 수정:` 표시) |
+| [`EfficientDet_Colab.ipynb`](./EfficientDet_Colab.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hwang-ye-song/EfficientDet-_CV/blob/main/EfficientDet_Colab.ipynb) | **Colab 실행용** — 원본 코드는 그대로 두고, 문제가 생기는 셀 위에만 `🔧 [추가]` 셀을 넣은 버전 |
 | [`4. EfficientDet 실습 [정리본].ipynb`](./4.%20EfficientDet%20실습%20[정리본].ipynb) | **정리본** — 원본 코드·출력 그대로 + 각 셀 아래 `💬 코멘트`, 결과 분석, 느낀 점 |
 | [`4. EfficientDet 실습 [프로젝트].ipynb`](./4.%20EfficientDet%20실습%20[프로젝트].ipynb) | 원본 실습 노트북 (Colab 실행) |
 | `4. EfficientDet 실습 [프로젝트].pdf` | 강의 자료 — EfficientDet 기반 제조 영상 분석 최적화 |
@@ -146,13 +146,18 @@ PCB 사진(`normal.png`)처럼 제조 현장 이미지에 적용하면 부품 �
 - **원본과 해상도가 다른 것은 용량 제한 때문에 어쩔 수 없었다.** 다만 모델 입력은 어차피 512px로 줄어들기 때문에 탐지 결과에는 거의 영향이 없다.
 
 ### 4. Colab 실행용 노트북 (`EfficientDet_Colab.ipynb`)
-파일 업로드 없이 `런타임 → 모두 실행`만으로 끝까지 돌아가도록 수정했다. 수정한 셀에는 `# ✏️ 수정:` 표시가 있다.
+처음에는 여러 셀을 한꺼번에 고쳤지만, **원본 흐름을 최대한 따라가는 것이 좋다**고 판단해서 방식을 바꿨다.
+→ 원본 코드 셀 57개는 **내용·순서 그대로** 두고, 처음부터 실행할 때 막히는 셀 **바로 위에 `🔧 [추가]` 셀만** 넣었다.
 
-| 구분 | 수정 내용 |
-|---|---|
-| 파일 자동 준비 | `soccer.mp4`는 이 저장소에서, 차량 데이터는 Kaggle에서 자동 다운로드 (로그인 불필요). yml은 계산한 mean/std·앵커·클래스로 자동 생성 |
-| 실행 에러 | `train.py`의 `verbose=True` 에러 자동 패치, 가중치 URL 오타 수정, 다시 실행해도 안전하게(clone·경로·변수 덮어쓰기), GPU 유무 자동 판단 |
-| 결과 개선 | 데이터 버전 통일(컬러 v8i), 학습·추론 앵커 일치, `obj_list`에서 빈 카테고리 `'cars'` 제거(5클래스), GPU가 있으면 `num_gpus: 1` |
-| 편의 | 결과 영상을 노트북 안에서 바로 재생, 2단계 학습은 최근 가중치 자동 로드 |
+| 막히는 원본 셀 | 원인 | 위에 추가한 것 |
+|---|---|---|
+| (노트북 맨 위 안내) | `soccer.mp4`가 없음 | 저장소의 `soccer.mp4`를 받아 `Yet-Another-EfficientDet-Pytorch` 폴더에 업로드하도록 안내 |
+| `!unzip ./datasets/archive.zip ...` | `archive.zip`이 없음 | Kaggle에서 자동 다운로드 (로그인 불필요) |
+| `train.py` 실행 | yml 파일이 캡처로만 있음 | `%%writefile`로 원본 yml 내용 그대로 생성 (`project_name`을 실제 폴더명으로, `num_gpus`를 1로만 변경) |
+| `train.py` 실행 | 최신 PyTorch의 `verbose=True` 에러 | 원본 안내와 같은 수정을 `sed`로 자동 적용 |
+| 2단계 학습 | `d0_9_80.pth` 파일명을 직접 지정 | 저장된 가중치 목록을 먼저 확인 |
 
-**검증 범위**: 모든 코드 셀 문법 검사, 데이터 다운로드 → 변환 → yml 생성까지 실제 실행 확인. 학습·평가·추론은 GPU 환경(Colab)에서 실행 필요.
+- 빈 셀과 이미지 파일이 없는 캡처 셀만 뺐다.
+- AP 0.000의 원인(앵커 불일치, 데이터 버전 혼용 등)은 원본 그대로 두었다. 분석과 개선 방안은 정리본에 있다.
+
+**검증 범위**: 모든 코드 셀 문법 검사, 원본 코드 셀 57개 보존 확인, 새 환경 기준으로 데이터 다운로드 → 압축 해제 → 변환 → yml 생성까지 실제 실행 확인. 학습·평가·추론은 GPU 환경(Colab)에서 실행 필요.
